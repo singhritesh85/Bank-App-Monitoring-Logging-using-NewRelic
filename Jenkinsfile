@@ -21,7 +21,7 @@ pipeline {
         stage("clone-code"){
             steps{
                 cleanWs()
-                checkout scmGit(branches: [[name: '${COMMIT_ID}']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-cred', url: 'https://github.com/singhritesh85/Bank-App-Monitoring-Logging-using-CloudWatch.git']])
+                checkout scmGit(branches: [[name: '${COMMIT_ID}']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-cred', url: 'https://github.com/singhritesh85/Bank-App-Monitoring-Logging-using-NewRelic.git']])
             }
         }
         stage("Build and DockerImage"){

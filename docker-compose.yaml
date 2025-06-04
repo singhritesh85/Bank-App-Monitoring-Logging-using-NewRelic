@@ -12,11 +12,11 @@ services:
     deploy:
       resources:
         limits: 
-          cpu: "0.5"
-          memory: 512M
+          cpus: "0.5"
+          memory: "512M"
         reservations: 
-          cpu: "0.25"
-          memory: 256M
+          cpus: "0.25"
+          memory: "256M"
     logging:
       driver: "awslogs"
       options:
@@ -45,11 +45,11 @@ services:
     deploy:
       resources:
         limits: 
-          cpu: "0.5"
-          memory: 512M
+          cpus: "0.5"
+          memory: "512M"
         reservations: 
-          cpu: "0.25"
-          memory: 256M
+          cpus: "0.25"
+          memory: "256M"
     logging:
       driver: "awslogs"
       options:

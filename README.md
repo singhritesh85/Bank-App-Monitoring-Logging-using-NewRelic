@@ -1,0 +1,1 @@
+The Environment parameter I provided in Dockerfile received from AWS Provided documents https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Application-Signals-Enable-EC2Main.html.

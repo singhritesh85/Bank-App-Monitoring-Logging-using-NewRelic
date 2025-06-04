@@ -1,0 +1,44 @@
+services:
+  mysql-primary.mysql.svc.cluster.local:   # I made such a service name for mysql container because in that case I do not need to change application.properties file.
+    image: mysql:8.0.0
+    container_name: mysql
+    env_file:
+    - ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}             ### used the database name as bankappdb
+    ports:
+    - "3306:3306"
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-2" # Replace with your AWS region
+        awslogs-group: "mysql"   # Replace with your Log Group name
+        awslogs-stream: "mysql-log-stream" # Replace with your Log Stream name (optional)
+    volumes:
+    - db_data:/var/lib/mysql
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile-Project-1
+    image: ${REPO_NAME}:${TAG_NAME}
+    container_name: bankapp
+    env_file:
+    - ./.env
+    depends_on:
+      - mysql-primary.mysql.svc.cluster.local
+    environment:
+      JDBC_URL: jdbc:mysql://mysql-primary.mysql.svc.cluster.local:3306/bankappdb?useSSL=false&serverTimezone=UTC
+      JDBC_USER: root
+      JDBC_PASS: ${MYSQL_ROOT_PASSWORD}
+    ports:
+    - "8080:8080"
+    pull_policy: never
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-2" # Replace with your AWS region
+        awslogs-group: "bankapp"   # Replace with your Log Group name
+        awslogs-stream: "bankapp-log-stream" # Replace with your Log Stream name (optional)
+volumes:
+  db_data:

@@ -17,13 +17,7 @@ services:
         reservations: 
           cpus: "0.25"
           memory: "256M"
-    restart: always
-    logging:
-      driver: "awslogs"
-      options:
-        awslogs-region: "us-east-2" # Replace with your AWS region
-        awslogs-group: "mysql"   # Replace with your Log Group name
-        awslogs-stream: "mysql-log-stream" # Replace with your Log Stream name (optional)
+    restart: always 
     volumes:
     - db_data:/var/lib/mysql
   app:
@@ -52,11 +46,11 @@ services:
           cpus: "0.25"
           memory: "256M"
     restart: always
-    logging:
-      driver: "awslogs"
-      options:
-        awslogs-region: "us-east-2" # Replace with your AWS region
-        awslogs-group: "bankapp"   # Replace with your Log Group name
-        awslogs-stream: "bankapp-log-stream" # Replace with your Log Stream name (optional)
 volumes:
   db_data:
+x-default-logging: &logging     ### For extracting Containers Logs
+  driver: "json-file"
+  options:
+    max-size: "5m"
+    max-file: "2"
+    tag: "{{.Name}}"

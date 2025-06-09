@@ -1,19 +1,11 @@
 FROM eclipse-temurin:17-jdk-alpine
 MAINTAINER "Dexter"
 
-### Where IP Address is used provide the IP Address of your Docker Server
-
-ENV JAVA_TOOL_OPTIONS=" -javaagent:/usr/src/app/aws-opentelemetry-agent.jar" \
-OTEL_METRICS_EXPORTER=none \
-OTEL_LOGS_EXPORTER=none \
-OTEL_AWS_APPLICATION_SIGNALS_ENABLED=true \
-OTEL_AWS_APPLICATION_SIGNALS_EXPORTER_ENDPOINT=http://10.10.4.195:4316/v1/metrics \    
-OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf \
-OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://10.10.4.195:4316/v1/traces \                    
-OTEL_RESOURCE_ATTRIBUTES="service.name=bankapp"
+RUN mkdir -p /usr/local/newrelic
+ADD ./newrelic/newrelic.jar /usr/local/newrelic/newrelic.jar
+ADD ./newrelic/newrelic.yml /usr/local/newrelic/newrelic.yml
 
 WORKDIR /usr/src/app
 COPY target/*.jar ./app.jar
-COPY ./aws-opentelemetry-agent.jar ./
 EXPOSE 8080
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-javaagent:/usr/local/newrelic/newrelic.jar", "-jar", "app.jar"]
